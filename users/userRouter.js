@@ -25,6 +25,8 @@ router.post('/', (req, res) => {
 
 router.post('/:id/posts', (req, res) => {
 
+
+
 });
 
 router.get('/', (req, res) => {
@@ -68,7 +70,25 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
 
+    if (!id) {
+        res.status(404).json({ message: "The user witht eh specified ID does not exist" });
+    } else if (!changes.name) {
+        res.status(400).json({ errorMessage: "Please provide a name for the user" });
+    } else {
+        Users.update(id, changes)
+            .then(updated => {
+                if (updated) {
+                    res.status(200).json(changes);
+                }
+            })
+            .catch(err => {
+                err = { error: "The user information could not be modified" };
+                res.status(500).json(err);
+            })
+    }
 });
 
 //custom middleware

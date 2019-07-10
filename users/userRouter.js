@@ -84,6 +84,7 @@ router.put('/:id', (req, res) => {
                     res.status(200).json(changes);
                 }
             })
+
             .catch(err => {
                 err = { error: "The user information could not be modified" };
                 res.status(500).json(err);

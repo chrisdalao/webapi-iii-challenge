@@ -4,7 +4,23 @@ const Users = require('./userDb.js');
 const router = express.Router();
 
 router.post('/', (req, res) => {
-
+    const userData = req.body;
+    if (!userData) {
+        res.status(400).json({ message: "missing user data" });
+    } else if (!userData.name) {
+        res.status(400).json({ message: "missing required name field" });
+    } else {
+        Users.insert(userData)
+            .then(user => {
+                if (user) {
+                    res.status(201).json(userData)
+                }
+            })
+            .catch(err => {
+                err = { error: "There was an error while saving the user to the database" };
+                res.status(500).json(err);
+            })
+    }
 });
 
 router.post('/:id/posts', (req, res) => {

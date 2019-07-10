@@ -1,5 +1,6 @@
 const express = require('express');
 const Users = require('./userDb.js');
+const Posts = require('../posts/postDb');
 
 const router = express.Router();
 
@@ -24,12 +25,26 @@ router.post('/', (req, res) => {
 });
 
 router.post('/:id/posts', (req, res) => {
-    // const {text} = req.body;
-    // const user_id = parseInt(req.params.id);
-    // const userPost = ({text, user_id})
-    // if(!userPost.user_id)
+    const { text } = req.body;
+    const user_id = parseInt(req.params.id);
+    const userPost = ({ text, user_id })
 
+    if (!userPost.text || !userPost.user_id) {
+        res.status(400).json({ message: "Please provide text for the post." });
+    } else {
+        Posts.insert(userPost)
+            .then(post => {
+                if (post) {
+                    res.status(201).json(userPost)
+                }
+            })
+            .catch(err => {
+                err = { error: "There was an error while saving the post to the database" };
+                res.status(500).json(err)
+            })
+    }
 });
+
 
 router.get('/', (req, res) => {
     Users.get()

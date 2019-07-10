@@ -24,8 +24,10 @@ router.post('/', (req, res) => {
 });
 
 router.post('/:id/posts', (req, res) => {
-
-
+    // const {text} = req.body;
+    // const user_id = parseInt(req.params.id);
+    // const userPost = ({text, user_id})
+    // if(!userPost.user_id)
 
 });
 

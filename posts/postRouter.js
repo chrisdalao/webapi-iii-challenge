@@ -76,7 +76,6 @@ function validatePostId(req, res, next) {
             err = { error: "The post information could not be retrieved" }
             res.status(500).json(err)
         })
-
     next();
 };
 

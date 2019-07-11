@@ -17,21 +17,8 @@ router.get('/', (req, res) => {
 
 });
 
-router.get('/:id', (req, res) => {
-    const { id } = req.params;
-    Posts.getById(id)
-        .then(post => {
-            if (post) {
-                res.status(200).json(post)
-            } else {
-                res.status(404).json({ message: "The post with the specified ID does not exist" });
-            }
-        })
-        .catch(err => {
-            err = { error: "The post information could not be retrieved" }
-            res.status(500).json(err)
-        })
-
+router.get('/:id', validatePostId, (req, res) => {
+    console.log('POST VALIDATED');
 });
 
 router.delete('/:id', (req, res) => {
@@ -76,7 +63,21 @@ router.put('/:id', (req, res) => {
 // custom middleware
 
 function validatePostId(req, res, next) {
+    const { id } = req.params;
+    Posts.getById(id)
+        .then(post => {
+            if (post) {
+                res.status(200).json(post)
+            } else {
+                res.status(404).json({ message: "The post with the specified ID does not exist" });
+            }
+        })
+        .catch(err => {
+            err = { error: "The post information could not be retrieved" }
+            res.status(500).json(err)
+        })
 
+    next();
 };
 
 module.exports = router;
